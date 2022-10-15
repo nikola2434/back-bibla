@@ -1,3 +1,4 @@
+import { refreshTokenDto } from './dto/refreshTokenDto.dto';
 import { authDto } from './dto/authDto.dto';
 import { UserModel } from './../user/user.model';
 import {
@@ -9,7 +10,6 @@ import { ModelType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
 import { hash, genSalt, compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { use } from 'passport';
 
 @Injectable()
 export class AuthService {
@@ -25,29 +25,43 @@ export class AuthService {
     }
     const isValidPassword = await compare(dto.password, user.password);
     if (!isValidPassword) {
-      throw new UnauthorizedException('Не верный email или пароль!');
+      throw new BadRequestException('Не верный email или пароль!');
     }
     const tokens = await this.getTokens(String(user._id));
     return { user, ...tokens };
   }
 
-  async register(dto: authDto) {
-    const oldUser = await this.UserModel.findOne({ email: dto.email });
-    if (oldUser) {
-      throw new BadRequestException('Этот пользователь уже существует');
-    }
+  async getNewTokens(dto: refreshTokenDto) {
+    if (!dto.refreshToken)
+      throw new UnauthorizedException('Войдите в систему!');
+    const result = await this.JwtService.verifyAsync(dto.refreshToken);
+    if (!result) throw new UnauthorizedException('Не верный токен!');
+    const user = await this.UserModel.findById(result._id);
 
-    const salt = await genSalt(10);
-
-    const newUser = new this.UserModel({
-      email: dto.email,
-      password: await hash(dto.password, salt),
-    });
-    const tokens = await this.getTokens(String(newUser._id));
-    newUser.save();
+    const tokens = await this.getTokens(String(user._id));
 
     return {
-      newUser,
+      user,
+      ...tokens,
+    };
+  }
+
+  async register({ email, password }: authDto) {
+    const oldUser = await this.UserModel.findOne({ email });
+    if (oldUser) {
+      throw new BadRequestException('Этот пользователь уже зарегистрирован!');
+    }
+    const salt = await genSalt(10);
+    const newUser = new this.UserModel({
+      email,
+      password: await hash(password, salt),
+    });
+    const user = await newUser.save();
+
+    const tokens = await this.getTokens(String(user._id));
+
+    return {
+      user,
       ...tokens,
     };
   }

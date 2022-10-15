@@ -1,3 +1,4 @@
+import { refreshTokenDto } from './dto/refreshTokenDto.dto';
 import { authDto } from './dto/authDto.dto';
 import { AuthService } from './auth.service';
 import {
@@ -17,13 +18,20 @@ export class AuthController {
   @HttpCode(200)
   @Post('register')
   async register(@Body() dto: authDto) {
-    return this.register(dto);
+    return this.AuthService.register(dto);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Post('access-token')
+  async getAccessToken(@Body() dto: refreshTokenDto) {
+    return this.AuthService.getNewTokens(dto);
   }
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('login')
   async login(@Body() dto: authDto) {
-    return this.login(dto);
+    return this.AuthService.login(dto);
   }
 }

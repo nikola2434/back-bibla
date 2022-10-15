@@ -1,6 +1,7 @@
+import { ConfigService } from '@nestjs/config';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { UserModel } from './../../user/user.model';
-import { ConfigService } from '@nestjs/config';
+
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -15,11 +16,11 @@ export class jwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: ConfigService.get('ACESS_TOKEN'),
-      ignoreExpiration: false,
+      ignoreExpiration: true,
     });
   }
 
   async validate({ _id }: Pick<UserModel, '_id'>) {
-    return await this.UserModel.findById(_id).exec();
+    return this.UserModel.findById(_id).exec();
   }
 }

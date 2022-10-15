@@ -1,20 +1,22 @@
-import { Prop } from '@nestjs/mongoose';
+
+import { prop } from '@typegoose/typegoose';
 import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses';
 
 export interface UserModel extends Base {}
 
 export class UserModel extends TimeStamps {
-  @Prop({ required: true, unique: true })
-  login: string;
+  @prop({ required: true, unique: true })
+  email: string;
 
-  @Prop({ required: true })
+  @prop({ required: true })
   password: string;
 
-  @Prop({ default: false })
+  @prop({ default: false })
   isAdmin: boolean;
 
-  @Prop()
+  @prop()
   avatar: string;
-  @Prop()
+
+  @prop({ default: [] })
   favoriteBooks: [];
 }
