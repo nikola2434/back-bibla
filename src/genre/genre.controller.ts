@@ -23,7 +23,7 @@ export class GenreController {
     return await this.GenreService.getAllGenres(searchTerm);
   }
 
-  @Get(':_id')
+  @Get('byId/:_id')
   async getGenreById(@Param('_id', idValidationPipe) _id: string) {
     return await this.GenreService.getGenreById(_id);
   }

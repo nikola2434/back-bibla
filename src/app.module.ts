@@ -1,3 +1,4 @@
+import { GenreModule } from './genre/genre.module';
 import { getMongoConfig } from './config/mongo.config';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -6,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     UserModule,
+    GenreModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

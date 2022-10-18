@@ -1,8 +1,9 @@
+
 import { TypegooseModule } from 'nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { GenreController } from './genre.controller';
 import { GenreService } from './genre.service';
-import { GenreModel } from './genre.model';
+import { GenreModel } from './genreModel';
 
 @Module({
   controllers: [GenreController],
