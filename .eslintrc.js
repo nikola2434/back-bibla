@@ -15,7 +15,12 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'user.model.ts', "genreModel.ts"],
+  ignorePatterns: [
+    '.eslintrc.js',
+    'user.model.ts',
+    'genreModel.ts',
+    'books.model.ts',
+  ],
   rules: {
     'no-console': 1,
     'prettier/prettier': 0,
