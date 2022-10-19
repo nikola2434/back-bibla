@@ -10,7 +10,9 @@ import { GenreModel } from './genreModel';
   providers: [GenreService],
   imports: [
     TypegooseModule.forFeature([
-      { typegooseClass: GenreModel, schemaOptions: { collection: 'Genre' } },
+      {
+        typegooseClass: GenreModel,
+        schemaOptions: { collection: 'Genre' } },
     ]),
   ],
 })

@@ -9,7 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { FilesModule } from './files/files.module';
 import { BooksModule } from './books/books.module';
-import { BooksModule } from './books/books.module';
+import { AuthorsModule } from './authors/authors.module';
+
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { BooksModule } from './books/books.module';
     GenreModule,
     FilesModule,
     BooksModule,
+    AuthorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

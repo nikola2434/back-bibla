@@ -20,6 +20,7 @@ module.exports = {
     'user.model.ts',
     'genreModel.ts',
     'books.model.ts',
+    'authorsModel.ts',
   ],
   rules: {
     'no-console': 1,

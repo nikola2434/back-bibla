@@ -42,7 +42,9 @@ export class BooksService {
   }
 
   async updateBook(id: string, dto: bookDto) {
-    return await this.BooksModel.findByIdAndUpdate(id, dto).exec();
+    return await this.BooksModel.findByIdAndUpdate(id, dto, {
+      new: true,
+    }).exec();
   }
 
   async deleteBook(id: string) {

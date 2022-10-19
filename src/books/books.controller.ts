@@ -28,13 +28,13 @@ export class BooksController {
     return await this.BooksService.getBookById(_id);
   }
 
-  @Post('create')
+  @Get('create')
   @Auth('admin')
   async createBook() {
     return this.BooksService.createBook();
   }
 
-  @Put('update/:_id')
+  @Put(':_id')
   @UsePipes(new ValidationPipe())
   @Auth('admin')
   async updateBook(@Param('_id') _id: string, @Body() dto: bookDto) {

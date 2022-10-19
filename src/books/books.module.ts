@@ -9,7 +9,7 @@ import { BooksService } from './books.service';
     TypegooseModule.forFeature([
       {
         typegooseClass: BooksModel,
-        schemaOptions: { collection: 'User' },
+        schemaOptions: { collection: 'Books' },
       },
     ]),
   ],
