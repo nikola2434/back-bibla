@@ -1,5 +1,6 @@
+import { BooksModel } from './../books/books.model';
 
-import { prop } from '@typegoose/typegoose';
+import { prop, Ref } from '@typegoose/typegoose';
 import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses';
 
 export interface UserModel extends Base {}
@@ -17,6 +18,6 @@ export class UserModel extends TimeStamps {
   @prop()
   avatar: string;
 
-  @prop({ default: [] })
-  favoriteBooks: [];
+  @prop({ default: [], ref: () => BooksModel })
+  favoriteBooks: Ref<BooksModel>[];
 }

@@ -4,6 +4,7 @@ import { UserModel } from './user.model';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { updateUser } from './dto/updateUser.dto';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class UserService {
@@ -59,5 +60,21 @@ export class UserService {
 
   async getCountUser() {
     return await this.UserModel.find().count().exec();
+  }
+
+  async toggleFavorite(bookId: Types.ObjectId, user: UserModel) {
+    const { _id, favoriteBooks } = user;
+
+    return this.UserModel.findByIdAndUpdate(_id, {
+      favoriteBooks: favoriteBooks.includes(bookId)
+        ? favoriteBooks.filter((book) => book !== bookId)
+        : [...favoriteBooks, bookId],
+    });
+  }
+
+  async getFavoriteBooks(id: Types.ObjectId) {
+    return await this.UserModel.findById(id, 'favoriteBooks')
+      .populate('favoriteBooks')
+      .exec();
   }
 }

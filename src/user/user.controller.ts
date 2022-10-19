@@ -1,3 +1,4 @@
+import { UserModel } from './../../dist/user/user.model.d';
 import { idValidationPipe } from './../pipes/idValidationPipe';
 import { UserService } from './user.service';
 import { Get, Put, Param, Body, Delete, Query } from '@nestjs/common';
@@ -5,6 +6,7 @@ import { Controller, HttpCode, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Auth } from 'src/auth/deccorators/Auth.deccorator';
 import { User } from './deccorators/user.deccorator';
 import { updateUser } from './dto/updateUser.dto';
+import { Types } from 'mongoose';
 
 @Controller('user')
 export class UserController {
@@ -51,5 +53,21 @@ export class UserController {
   @Auth('admin')
   async getAllUsers(@Query('value') value?: string) {
     return await this.UserService.getAllUsers(value);
+  }
+
+  @Put('profile/:bookId')
+  @Auth()
+  @HttpCode(200)
+  async toggleFavorite(
+    @Param('bookId', idValidationPipe) bookId: Types.ObjectId,
+    @User() user: UserModel,
+  ) {
+    return await this.UserService.toggleFavorite(bookId, user);
+  }
+
+  @Get('favorites')
+  @Auth()
+  async getFavorites(@User('_id') _id: Types.ObjectId) {
+    return await this.UserService.getFavoriteBooks(_id);
   }
 }

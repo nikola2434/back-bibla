@@ -1,5 +1,7 @@
+import { GenreModel } from './../genre/genreModel';
+import { AuthorsModel } from './../authors/authorsModel';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import { prop } from '@typegoose/typegoose';
+import { prop, Ref } from '@typegoose/typegoose';
 
 export interface BooksModel extends Base {}
 
@@ -7,11 +9,11 @@ export class BooksModel extends TimeStamps {
   @prop({ required: true })
   title: string;
 
-  @prop({ required: true })
-  author: string;
+  @prop({ required: true, ref: () => AuthorsModel })
+  author: Ref<AuthorsModel>;
 
-  @prop({ required: true })
-  genre: string;
+  @prop({ required: true, ref: () => GenreModel })
+  genre: Ref<GenreModel>;
 
   @prop()
   description: string;
