@@ -6,6 +6,11 @@ import { Auth } from 'src/auth/deccorators/Auth.deccorator';
 @Controller('authors')
 export class AuthorsController {
   constructor(private readonly AuthorsService: AuthorsService) {}
+  @Get("count")
+  @Auth("admin")
+  async getCount (){
+    return this.AuthorsService.getCount()
+  }
 
   @Get()
   async getAllBooks(@Query('searchTerm') searchTerm?: string) {
@@ -36,9 +41,5 @@ export class AuthorsController {
     return this.AuthorsService.deleteAuthor(id)
   }
 
-  @Get("count")
-  @Auth("admin")
-  async getCount (){
-    return this.AuthorsService.getCount()
-  }
+
 }

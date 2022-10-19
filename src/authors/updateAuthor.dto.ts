@@ -14,6 +14,5 @@ export class updateAuthor {
   avatar: string;
 
   @IsArray()
-  @IsString()
   BooksWritten: [];
 }

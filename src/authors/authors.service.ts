@@ -25,9 +25,7 @@ export class AuthorsService {
   }
 
   async getById(id: string) {
-    return await (await this.AuthorsModel.findById(id))
-      .populated('BooksWritten')
-      .exec();
+    return await await this.AuthorsModel.findById(id).populate("BooksWritten");
   }
 
   async createAuthor() {
