@@ -1,5 +1,5 @@
 import { updateGenre } from './dto/updateGenre.dto';
-import { GenreModel } from './../../dist/genre/genre.model';
+import { GenreModel } from "./genreModel";
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';

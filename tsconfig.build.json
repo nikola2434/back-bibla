@@ -6,6 +6,9 @@
     "dist",
     "**/*spec.ts",
     "./plugins/**/*",
-    "./typings/**/*"
+    "./typings/**/*",
+    "./dist",
+    "./dist/**/*",
+    "dist/**/*"
   ]
 }

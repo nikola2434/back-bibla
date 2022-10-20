@@ -1,4 +1,4 @@
-import { UserModel } from './../../dist/user/user.model.d';
+import { UserModel } from "./user.model";
 import { idValidationPipe } from './../pipes/idValidationPipe';
 import { UserService } from './user.service';
 import { Get, Put, Param, Body, Delete, Query } from '@nestjs/common';
