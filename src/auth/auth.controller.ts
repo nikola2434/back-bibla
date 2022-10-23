@@ -8,6 +8,7 @@ import {
   UsePipes,
   ValidationPipe,
   HttpCode,
+  Header,
 } from '@nestjs/common';
 
 @Controller('auth')
@@ -16,6 +17,7 @@ export class AuthController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
+  @Header("Access-Control-Allow-Origin", "*")
   @Post('register')
   async register(@Body() dto: authDto) {
     return this.AuthService.register(dto);

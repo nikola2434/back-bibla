@@ -1,5 +1,5 @@
 import { updateGenre } from './dto/updateGenre.dto';
-import { GenreModel } from "./genreModel";
+import { GenreModel } from './genreModel';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
@@ -10,7 +10,7 @@ export class GenreService {
     @InjectModel(GenreModel) private readonly GenreModel: ModelType<GenreModel>,
   ) {}
 
-  async getAllGenres(searchTerm?: string) {
+  async getAllGenres(page = 1, limit = 10, searchTerm?: string) {
     let options = {};
 
     if (searchTerm) {
@@ -25,7 +25,9 @@ export class GenreService {
         ],
       };
     }
-    return await this.GenreModel.find(options).exec();
+    return await this.GenreModel.find(options)
+      .skip(limit * (page - 1))
+      .limit(limit);
   }
 
   async getGenreById(id: string) {
@@ -39,12 +41,12 @@ export class GenreService {
     const newGenre: updateGenre = {
       title: ' ',
       link: ' ',
-      icons: ' ',
+      icons: 'MdBook',
       description: ' ',
       books: [],
     };
     const genre = await this.GenreModel.create(newGenre);
-    return genre._id;
+    return { newId: genre._id };
   }
 
   async updateGenre(id: string, dto: updateGenre) {

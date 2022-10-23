@@ -19,8 +19,12 @@ export class GenreController {
   constructor(private readonly GenreService: GenreService) {}
 
   @Get('allGenres')
-  async getAllGenres(@Query('searchTerm') searchTerm?: string) {
-    return await this.GenreService.getAllGenres(searchTerm);
+  async getAllGenres(
+    @Query('searchTerm') searchTerm?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return await this.GenreService.getAllGenres(page, limit, searchTerm);
   }
 
   @Get('byId/:_id')

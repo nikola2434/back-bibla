@@ -1,20 +1,42 @@
+import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { updateAuthor } from './updateAuthor.dto';
 import { AuthorsService } from './authors.service';
-import { Controller, Get, Query, Param, Post, Put, ValidationPipe , UsePipes, Body, Delete} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Param,
+  Post,
+  Put,
+  ValidationPipe,
+  UsePipes,
+  Body,
+  Delete,
+} from '@nestjs/common';
 import { Auth } from 'src/auth/deccorators/Auth.deccorator';
 
 @Controller('authors')
 export class AuthorsController {
   constructor(private readonly AuthorsService: AuthorsService) {}
-  @Get("count")
-  @Auth("admin")
-  async getCount (){
-    return this.AuthorsService.getCount()
+  @Get('count')
+  @Auth('admin')
+  async getCount() {
+    return this.AuthorsService.getCount();
   }
 
   @Get()
-  async getAllBooks(@Query('searchTerm') searchTerm?: string) {
-    return await this.AuthorsService.getAllBooks(searchTerm);
+  async getAllBooks(
+    @Query('searchTerm') searchTerm?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return await this.AuthorsService.getAllBooks(page, limit, searchTerm);
+  }
+
+  @Get('create')
+  @Auth('admin')
+  async createAuthor() {
+    return this.AuthorsService.createAuthor();
   }
 
   @Get(':_id')
@@ -22,24 +44,16 @@ export class AuthorsController {
     return await this.AuthorsService.getById(_id);
   }
 
-  @Post()
+  @Put(':id')
   @Auth('admin')
-  async createAuthor() {
-    return this.AuthorsService.createAuthor();
+  @UsePipes(new ValidationPipe())
+  async updateAuthor(@Param('id') id: string, @Body() dto: updateAuthor) {
+    return await this.AuthorsService.updateAuthor(id, dto);
   }
 
-  @Put(":id")
-  @Auth("admin")
-  @UsePipes(new ValidationPipe)
-  async updateAuthor(@Param("id") id:string, @Body() dto:updateAuthor ){
-    return await this.AuthorsService.updateAuthor(id, dto)
+  @Delete(':id')
+  @Auth('admin')
+  async deleteAuthor(@Param('id') id: string) {
+    return this.AuthorsService.deleteAuthor(id);
   }
-
-  @Delete(":id")
-  @Auth("admin")
-  async deleteAuthor(@Param("id") id:string){
-    return this.AuthorsService.deleteAuthor(id)
-  }
-
-
 }

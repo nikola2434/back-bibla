@@ -39,12 +39,20 @@ export class UserService {
     return user;
   }
 
+  async updateUserAdmin(id: Types.ObjectId, isAdmin: boolean) {
+    return this.UserModel.findByIdAndUpdate(
+      id,
+      { isAdmin: isAdmin },
+      { new: true },
+    );
+  }
+
   async getAllUsers(searchTerm?: string) {
     let options = {};
-
+    console.log(searchTerm);
     if (searchTerm) {
       options = {
-        $or: [{ email: new RegExp(searchTerm, 'i') }],
+        email: new RegExp(searchTerm, 'i'),
       };
     }
     return await this.UserModel.find(options)

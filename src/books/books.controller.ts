@@ -19,8 +19,12 @@ export class BooksController {
   constructor(private readonly BooksService: BooksService) {}
 
   @Get('allBooks')
-  async getAllBooks(@Query('searchTerm') searchTerm?: string) {
-    return await this.BooksService.getAllBooks(searchTerm);
+  async getAllBooks(
+    @Query('searchTerm') searchTerm?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return await this.BooksService.getAllBooks(page, limit, searchTerm);
   }
 
   @Get('byId/:_id')
@@ -51,5 +55,10 @@ export class BooksController {
   @Auth('admin')
   async getCount() {
     return this.BooksService.getCountBooks();
+  }
+
+  @Get('popular')
+  async getPopular() {
+    return await this.BooksService.getPopularBook();
   }
 }

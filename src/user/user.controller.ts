@@ -1,4 +1,4 @@
-import { UserModel } from "./user.model";
+import { UserModel } from './user.model';
 import { idValidationPipe } from './../pipes/idValidationPipe';
 import { UserService } from './user.service';
 import { Get, Put, Param, Body, Delete, Query } from '@nestjs/common';
@@ -24,6 +24,12 @@ export class UserController {
     return await this.UserService.getCountUser();
   }
 
+  @Get(':id')
+  @Auth('admin')
+  async getUserById(@Param('id') id: string) {
+    return await this.UserService.byId(id);
+  }
+
   @UsePipes(new ValidationPipe())
   @Put('profile')
   @Auth()
@@ -32,15 +38,15 @@ export class UserController {
     return await this.UserService.updateUser(_id, dto);
   }
 
-  @UsePipes(new ValidationPipe())
-  @Put(':_id')
+  @Put('admin/:id')
   @Auth('admin')
   @HttpCode(200)
-  async updateUser(
-    @Param('_id', idValidationPipe) _id: string,
-    @Body() dto: updateUser,
+  @UsePipes(new ValidationPipe())
+  async updateAdminUSer(
+    @Param('id', idValidationPipe) id: Types.ObjectId,
+    @Body() dto: { isAdmin: boolean },
   ) {
-    return await this.UserService.updateUser(_id, dto);
+    return await this.UserService.updateUserAdmin(id, dto.isAdmin);
   }
 
   @Delete(':_id')
@@ -51,11 +57,11 @@ export class UserController {
 
   @Get()
   @Auth('admin')
-  async getAllUsers(@Query('value') value?: string) {
-    return await this.UserService.getAllUsers(value);
+  async getAllUsers(@Query('searchTerm') searchTerm?: string) {
+    return await this.UserService.getAllUsers(searchTerm);
   }
 
-  @Put('profile/:bookId')
+  @Put('favorite/:bookId')
   @Auth()
   @HttpCode(200)
   async toggleFavorite(

@@ -3,6 +3,7 @@ import { ModelType } from '@typegoose/typegoose/lib/types';
 import { AuthorsModel } from './authorsModel';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
+import { PaginateQuery, paginate } from 'nestjs-paginate';
 
 @Injectable()
 export class AuthorsService {
@@ -11,7 +12,7 @@ export class AuthorsService {
     private readonly AuthorsModel: ModelType<AuthorsModel>,
   ) {}
 
-  async getAllBooks(searchTerm?: string) {
+  async getAllBooks(page = 1, limit = 10, searchTerm?: string) {
     let options = {};
 
     if (searchTerm) {
@@ -21,11 +22,12 @@ export class AuthorsService {
     }
     return await this.AuthorsModel.find(options)
       .sort({ createdAt: 'desc' })
-      .exec();
+      .skip(limit * (page - 1))
+      .limit(limit);
   }
 
   async getById(id: string) {
-    return await await this.AuthorsModel.findById(id).populate("BooksWritten");
+    return await await this.AuthorsModel.findById(id).populate('BooksWritten');
   }
 
   async createAuthor() {
@@ -38,7 +40,7 @@ export class AuthorsService {
     };
 
     const author = await this.AuthorsModel.create(newAuthor);
-    return author._id;
+    return { newId: author._id };
   }
 
   async updateAuthor(id: string, dto: updateAuthor) {

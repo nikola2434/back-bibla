@@ -9,11 +9,11 @@ export class BooksModel extends TimeStamps {
   @prop({ required: true })
   title: string;
 
-  @prop({ required: true, ref: () => AuthorsModel })
-  author: Ref<AuthorsModel>;
+  @prop({ required: true })
+  author: string;
 
-  @prop({ required: true, ref: () => GenreModel })
-  genre: Ref<GenreModel>;
+  @prop({ required: true })
+  genre: string;
 
   @prop()
   description: string;

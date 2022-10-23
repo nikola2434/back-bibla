@@ -9,7 +9,6 @@ export class FilesService {
     files: Express.Multer.File[],
     folder = 'default',
   ): Promise<IFileResponse[]> {
-    console.log(folder);
     const uploadFile = `${path}/uploads/${folder}`;
 
     await ensureDir(uploadFile);
@@ -19,7 +18,7 @@ export class FilesService {
         await writeFile(`${uploadFile}/${file.originalname}`, file.buffer);
 
         return {
-          urL: `/uploads/${folder}/${file.originalname}`,
+          url: `/uploads/${folder}/${file.originalname}`,
           name: file.originalname,
         } as IFileResponse;
       }),

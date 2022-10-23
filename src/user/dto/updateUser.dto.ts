@@ -1,8 +1,9 @@
-import { IsEmail } from 'class-validator';
+
 
 export class updateUser {
-  @IsEmail()
-  email: string;
+  email?: string;
+
+  avatar?: string;
 
   password?: string;
 

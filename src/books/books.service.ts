@@ -10,7 +10,7 @@ export class BooksService {
     @InjectModel(BooksModel) private readonly BooksModel: ModelType<BooksModel>,
   ) {}
 
-  async getAllBooks(searchTerm?: string) {
+  async getAllBooks(page = 1, limit = 10, searchTerm?: string) {
     let options = {};
     if (searchTerm) {
       options = {
@@ -22,7 +22,8 @@ export class BooksService {
     }
     return await this.BooksModel.find(options)
       .sort({ createdAt: 'desc' })
-      .exec();
+      .skip(limit * (page - 1))
+      .limit(limit);
   }
 
   async getBookById(id: string) {
@@ -32,10 +33,10 @@ export class BooksService {
   async createBook() {
     const defaultBook: bookDto = {
       author: ' ',
-      genre: ' ',
       poster: ' ',
       title: ' ',
       description: ' ',
+      genre: ' ',
     };
     const book = await this.BooksModel.create(defaultBook);
     return book._id;
@@ -53,5 +54,10 @@ export class BooksService {
 
   async getCountBooks() {
     return await this.BooksModel.find().count().exec();
+  }
+
+  async getPopularBook() {
+    const books = await this.BooksModel.find().sort({ rating: 'desc' });
+    return books[0];
   }
 }

@@ -20,3 +20,4 @@ export class AuthorsModel extends TimeStamps {
   @prop({ ref: () => BooksModel })
   BooksWritten: Ref<BooksModel>[];
 }
+
