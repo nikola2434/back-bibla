@@ -1,4 +1,3 @@
-import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { updateAuthor } from './updateAuthor.dto';
 import { AuthorsService } from './authors.service';
 import {

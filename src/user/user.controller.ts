@@ -5,7 +5,7 @@ import { Get, Put, Param, Body, Delete, Query } from '@nestjs/common';
 import { Controller, HttpCode, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Auth } from 'src/auth/deccorators/Auth.deccorator';
 import { User } from './deccorators/user.deccorator';
-import { updateUser } from './dto/updateUser.dto';
+import { updateUser, updateImage } from './dto/updateUser.dto';
 import { Types } from 'mongoose';
 
 @Controller('user')
@@ -36,6 +36,16 @@ export class UserController {
   @HttpCode(200)
   async updateProfile(@User('_id') _id: string, @Body() dto: updateUser) {
     return await this.UserService.updateUser(_id, dto);
+  }
+
+  @Put('profile/image')
+  @Auth()
+  @HttpCode(200)
+  async updateImage(
+    @User('_id') _id: Types.ObjectId,
+    @Body() dto: updateImage,
+  ) {
+    return await this.UserService.updateImage(_id, dto);
   }
 
   @Put('admin/:id')

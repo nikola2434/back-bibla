@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { Auth } from 'src/auth/deccorators/Auth.deccorator';
 import { bookDto } from './books.dto';
+import { Types } from 'mongoose';
 
 @Controller('books')
 export class BooksController {
@@ -41,7 +42,7 @@ export class BooksController {
   @Put(':_id')
   @UsePipes(new ValidationPipe())
   @Auth('admin')
-  async updateBook(@Param('_id') _id: string, @Body() dto: bookDto) {
+  async updateBook(@Param('_id') _id: Types.ObjectId, @Body() dto: bookDto) {
     return await this.BooksService.updateBook(_id, dto);
   }
 

@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { FilesModule } from './files/files.module';
 import { BooksModule } from './books/books.module';
 import { AuthorsModule } from './authors/authors.module';
+import { SlidersModule } from './sliders/sliders.module';
 
 
 @Module({
@@ -26,6 +27,7 @@ import { AuthorsModule } from './authors/authors.module';
     FilesModule,
     BooksModule,
     AuthorsModule,
+    SlidersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

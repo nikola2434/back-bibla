@@ -1,16 +1,21 @@
+import { AuthorsService } from './../authors/authors.service';
+import { GenreService } from './../genre/genre.service';
 import { BooksModel } from './books.model';
 import { ModelType } from '@typegoose/typegoose/lib/types';
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { bookDto } from './books.dto';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class BooksService {
   constructor(
     @InjectModel(BooksModel) private readonly BooksModel: ModelType<BooksModel>,
+    private readonly GenreService: GenreService,
+    private readonly AuthorsService: AuthorsService,
   ) {}
 
-  async getAllBooks(page = 1, limit = 10, searchTerm?: string) {
+  async getAllBooks(page?: number, limit?: number, searchTerm?: string) {
     let options = {};
     if (searchTerm) {
       options = {
@@ -42,7 +47,18 @@ export class BooksService {
     return book._id;
   }
 
-  async updateBook(id: string, dto: bookDto) {
+  async updateBook(id: Types.ObjectId, dto: bookDto) {
+    if (
+      (dto.author === ' ' || dto.genre === ' ',
+      dto.poster === ' ',
+      dto.title === ' ')
+    ) {
+      await this.BooksModel.findByIdAndDelete(id);
+      throw new BadRequestException('Не верные данные!');
+    }
+
+    await this.AuthorsService.addBook(id, dto.author);
+    await this.GenreService.addBooks(id, dto.genre);
     return await this.BooksModel.findByIdAndUpdate(id, dto, {
       new: true,
     }).exec();

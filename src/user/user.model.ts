@@ -15,7 +15,7 @@ export class UserModel extends TimeStamps {
   @prop({ default: false })
   isAdmin: boolean;
 
-  @prop()
+  @prop({ default: '' })
   avatar: string;
 
   @prop({ default: [], ref: () => BooksModel })

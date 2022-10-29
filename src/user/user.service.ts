@@ -3,7 +3,7 @@ import { ModelType } from '@typegoose/typegoose/lib/types';
 import { UserModel } from './user.model';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
-import { updateUser } from './dto/updateUser.dto';
+import { updateUser, updateImage } from './dto/updateUser.dto';
 import { Types } from 'mongoose';
 
 @Injectable()
@@ -31,12 +31,22 @@ export class UserService {
     }
 
     user.email = dto.email;
+
     if (dto.isAdmin || dto.isAdmin === false) {
       user.isAdmin = dto.isAdmin;
     }
     await user.save();
 
     return user;
+  }
+
+  async updateImage(id: Types.ObjectId, dto: updateImage) {
+    const user = await this.UserModel.findByIdAndUpdate(
+      id,
+      { avatar: dto.url },
+      { new: true },
+    );
+    return { user: user };
   }
 
   async updateUserAdmin(id: Types.ObjectId, isAdmin: boolean) {

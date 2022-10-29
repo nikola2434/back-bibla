@@ -27,9 +27,9 @@ export class GenreController {
     return await this.GenreService.getAllGenres(page, limit, searchTerm);
   }
 
-  @Get('byId/:_id')
-  async getGenreById(@Param('_id', idValidationPipe) _id: string) {
-    return await this.GenreService.getGenreById(_id);
+  @Get('byId/:slug')
+  async getGenreById(@Param('slug') slug: string) {
+    return await this.GenreService.getGenreById(slug);
   }
 
   @Get('create')

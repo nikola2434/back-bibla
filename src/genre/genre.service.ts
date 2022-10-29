@@ -1,6 +1,12 @@
+import { Types } from 'mongoose';
+import { SlidersModel } from './../sliders/sliders.model';
 import { updateGenre } from './dto/updateGenre.dto';
 import { GenreModel } from './genreModel';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 
@@ -10,7 +16,7 @@ export class GenreService {
     @InjectModel(GenreModel) private readonly GenreModel: ModelType<GenreModel>,
   ) {}
 
-  async getAllGenres(page = 1, limit = 10, searchTerm?: string) {
+  async getAllGenres(page?: number, limit?: number, searchTerm?: string) {
     let options = {};
 
     if (searchTerm) {
@@ -30,11 +36,31 @@ export class GenreService {
       .limit(limit);
   }
 
-  async getGenreById(id: string) {
-    const genre = await this.GenreModel.findById(id);
+  async getGenreById(slug: string) {
+    const genre = await this.GenreModel.findOne({ link: slug }).populate(
+      'books',
+    );
     if (!genre) throw new NotFoundException('Жанр не найден!');
 
     return genre;
+  }
+
+  async addBooks(idBook: Types.ObjectId, genre: string) {
+    const options = {
+      $or: [{ title: new RegExp(genre, 'i') }],
+    };
+    return await this.GenreModel.findOneAndUpdate(options, {
+      $addToSet: { books: [idBook] },
+    });
+  }
+
+  async deleteBooks(idBook: Types.ObjectId, genre: string) {
+    const options = {
+      $or: [{ title: new RegExp(genre, 'i') }],
+    };
+    return await this.GenreModel.findByIdAndUpdate(options, {
+      $pull: { books: [idBook] },
+    });
   }
 
   async createGenre() {
@@ -50,6 +76,11 @@ export class GenreService {
   }
 
   async updateGenre(id: string, dto: updateGenre) {
+    if ((dto.icons === ' ' || dto.link === ' ', dto.title === ' ')) {
+      await this.GenreModel.findByIdAndDelete(id);
+      throw new BadRequestException('Не верные данные!');
+    }
+
     return this.GenreModel.findByIdAndUpdate(id, dto, { new: true }).exec();
   }
 

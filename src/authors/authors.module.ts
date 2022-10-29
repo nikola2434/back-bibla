@@ -15,5 +15,6 @@ import { AuthorsService } from './authors.service';
   ],
   controllers: [AuthorsController],
   providers: [AuthorsService],
+  exports: [AuthorsService],
 })
 export class AuthorsModule {}

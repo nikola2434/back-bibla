@@ -1,11 +1,11 @@
-
-
 export class updateUser {
   email?: string;
-
-  avatar?: string;
 
   password?: string;
 
   isAdmin?: boolean;
+}
+
+export class updateImage {
+  url: string;
 }

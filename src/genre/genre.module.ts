@@ -1,4 +1,3 @@
-
 import { TypegooseModule } from 'nestjs-typegoose';
 import { Module } from '@nestjs/common';
 import { GenreController } from './genre.controller';
@@ -8,6 +7,7 @@ import { GenreModel } from './genreModel';
 @Module({
   controllers: [GenreController],
   providers: [GenreService],
+  exports: [GenreService],
   imports: [
     TypegooseModule.forFeature([
       {
