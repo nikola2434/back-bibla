@@ -62,4 +62,9 @@ export class BooksController {
   async getPopular() {
     return await this.BooksService.getPopularBook();
   }
+
+  @Get('populars')
+  async getPopularBooks() {
+    return await this.BooksService.getPopularBooks();
+  }
 }

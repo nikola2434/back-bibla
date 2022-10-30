@@ -31,7 +31,16 @@ export class BooksService {
       .limit(limit);
   }
 
+  async incCount(id: string) {
+    return await this.BooksModel.findByIdAndUpdate(
+      id,
+      { $inc: { count: 1 } },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
+    );
+  }
+
   async getBookById(id: string) {
+    await this.incCount(id);
     return await this.BooksModel.findById(id).exec();
   }
 
@@ -73,8 +82,12 @@ export class BooksService {
   }
 
   async getPopularBook() {
-    const books = await this.BooksModel.find().sort({ rating: 'desc' });
+    const books = await this.BooksModel.find().sort({ rating: 'desc' }).exec();
     return books[0];
+  }
+
+  async getPopularBooks() {
+    return await this.BooksModel.find().sort({ count: 'desc' }).exec();
   }
 
   async updateRating(bookId: Types.ObjectId, rating: number) {

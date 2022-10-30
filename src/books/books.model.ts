@@ -23,4 +23,7 @@ export class BooksModel extends TimeStamps {
 
   @prop({ required: true })
   poster: string;
+
+  @prop({ default: 0 })
+  count: number;
 }
