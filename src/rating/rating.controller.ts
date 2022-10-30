@@ -18,6 +18,12 @@ import { User } from 'src/user/deccorators/user.deccorator';
 export class RatingController {
   constructor(private readonly RatingService: RatingService) {}
 
+  @Get('evaluated')
+  @Auth()
+  async getEvaluated(@User('_id') _id: Types.ObjectId) {
+    return await this.RatingService.getEvaluatedBooks(_id);
+  }
+
   @Get(':bookId')
   @Auth()
   async getValueRating(

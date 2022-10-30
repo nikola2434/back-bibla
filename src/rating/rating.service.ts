@@ -46,4 +46,12 @@ export class RatingService {
       ratings.reduce((acc, value) => acc + value.value, 0) / ratings.length
     );
   }
+
+  async getEvaluatedBooks(userId: Types.ObjectId) {
+    return await this.RatingModel.find({ userId: userId })
+      .sort({ createdAt: 'desc' })
+      .select('bookId')
+      .populate('bookId')
+      .exec();
+  }
 }
