@@ -85,7 +85,7 @@ export class UserService {
 
     return this.UserModel.findByIdAndUpdate(_id, {
       favoriteBooks: favoriteBooks.includes(bookId)
-        ? favoriteBooks.filter((book) => book !== bookId)
+        ? favoriteBooks.filter((book) => String(book) !== String(bookId))
         : [...favoriteBooks, bookId],
     });
   }

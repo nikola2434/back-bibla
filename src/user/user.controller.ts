@@ -24,6 +24,12 @@ export class UserController {
     return await this.UserService.getCountUser();
   }
 
+  @Get('favorites')
+  @Auth()
+  async getFavorites(@User('_id') _id: Types.ObjectId) {
+    return await this.UserService.getFavoriteBooks(_id);
+  }
+
   @Get(':id')
   @Auth('admin')
   async getUserById(@Param('id') id: string) {
@@ -79,11 +85,5 @@ export class UserController {
     @User() user: UserModel,
   ) {
     return await this.UserService.toggleFavorite(bookId, user);
-  }
-
-  @Get('favorites')
-  @Auth()
-  async getFavorites(@User('_id') _id: Types.ObjectId) {
-    return await this.UserService.getFavoriteBooks(_id);
   }
 }
