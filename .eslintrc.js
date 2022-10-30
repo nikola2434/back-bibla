@@ -21,6 +21,7 @@ module.exports = {
     'genreModel.ts',
     'books.model.ts',
     'authorsModel.ts',
+    'rating.model.ts',
   ],
   rules: {
     'no-console': 1,

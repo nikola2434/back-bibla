@@ -76,4 +76,8 @@ export class BooksService {
     const books = await this.BooksModel.find().sort({ rating: 'desc' });
     return books[0];
   }
+
+  async updateRating(bookId: Types.ObjectId, rating: number) {
+    return await this.BooksModel.findByIdAndUpdate(bookId, { rating }).exec();
+  }
 }
