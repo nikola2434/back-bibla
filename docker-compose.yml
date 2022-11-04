@@ -1,0 +1,26 @@
+version: '3.3'
+
+services:
+  main:
+    container_name: main
+    image: nestjs-api-dev:1.0.0
+    build:
+      context: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 5000:5000
+    command: yarn run start
+    depends_on:
+      - mongodb
+    restart: always
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    volumes:
+      - ./database:/data/db
+    ports:
+      - 27017:27017
+    restart: always

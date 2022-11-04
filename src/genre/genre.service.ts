@@ -75,13 +75,15 @@ export class GenreService {
     return { newId: genre._id };
   }
 
-  async updateGenre(id: string, dto: updateGenre) {
+  async updateGenre(slug: string, dto: updateGenre) {
     if ((dto.icons === ' ' || dto.link === ' ', dto.title === ' ')) {
-      await this.GenreModel.findByIdAndDelete(id);
+      await this.GenreModel.findOneAndDelete({ link: slug });
       throw new BadRequestException('Не верные данные!');
     }
 
-    return this.GenreModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+    return this.GenreModel.findOneAndUpdate({ link: slug }, dto, {
+      new: true,
+    }).exec();
   }
 
   async deleteGenre(id: string) {

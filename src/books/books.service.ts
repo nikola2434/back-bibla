@@ -82,7 +82,7 @@ export class BooksService {
   }
 
   async getPopularBook() {
-    const books = await this.BooksModel.find().sort({ rating: 'desc' }).exec();
+    const books = await this.BooksModel.find().sort({ count: 'desc' }).exec();
     return books[0];
   }
 

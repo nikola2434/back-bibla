@@ -38,14 +38,11 @@ export class GenreController {
     return await this.GenreService.createGenre();
   }
 
-  @Put(':_id')
+  @Put(':slug')
   @Auth('admin')
   @UsePipes(new ValidationPipe())
-  async updateGenre(
-    @Param('_id', idValidationPipe) _id: string,
-    @Body() dto: updateGenre,
-  ) {
-    return await this.GenreService.updateGenre(_id, dto);
+  async updateGenre(@Param('slug') slug: string, @Body() dto: updateGenre) {
+    return await this.GenreService.updateGenre(slug, dto);
   }
 
   @Delete(':_id')
