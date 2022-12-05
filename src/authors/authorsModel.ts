@@ -14,10 +14,11 @@ export class AuthorsModel extends TimeStamps {
   @prop({ required: true })
   DateOfBirth: string;
 
-  @prop({ required: true })
+  @prop({
+    required: true,
+  })
   avatar: string;
 
   @prop({ ref: () => BooksModel })
   BooksWritten: Ref<BooksModel>[];
 }
-

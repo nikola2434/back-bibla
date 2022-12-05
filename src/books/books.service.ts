@@ -47,7 +47,8 @@ export class BooksService {
   async createBook() {
     const defaultBook: bookDto = {
       author: ' ',
-      poster: ' ',
+      poster:
+        'http://localhost:5000/uploads/test/misterwives-connect-the-dots-music-paper-graphics-hummingbird-2-3-png-clip-art.png',
       title: ' ',
       description: ' ',
       genre: ' ',

@@ -6,21 +6,33 @@ services:
     image: nestjs-api-dev:1.0.0
     build:
       context: .
+      target: development
     volumes:
       - .:/app
       - /app/node_modules
     ports:
       - 5000:5000
+    networks:
+      - nesjs-network
     command: yarn run start
+    env_file:
+      - .env
     depends_on:
       - mongodb
     restart: always
 
   mongodb:
-    container_name: mongodb
+    container_name: nest_mongo
     image: mongo:latest
-    volumes:
-      - ./database:/data/db
     ports:
       - 27017:27017
     restart: always
+    volumes:
+      - ./database:/data/db
+    networks:
+      - nesjs-network
+    env_file:
+      - .env
+networks:
+  nesjs-network:
+    driver: bridge

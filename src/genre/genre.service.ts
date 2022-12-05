@@ -36,10 +36,16 @@ export class GenreService {
       .limit(limit);
   }
 
-  async getGenreById(slug: string) {
+  async getGenreBySlug(slug: string) {
     const genre = await this.GenreModel.findOne({ link: slug }).populate(
       'books',
     );
+    if (!genre) throw new NotFoundException('Жанр не найден!');
+
+    return genre;
+  }
+  async getGenreById(id: Types.ObjectId) {
+    const genre = await this.GenreModel.findById(id).populate('books');
     if (!genre) throw new NotFoundException('Жанр не найден!');
 
     return genre;
@@ -75,18 +81,18 @@ export class GenreService {
     return { newId: genre._id };
   }
 
-  async updateGenre(slug: string, dto: updateGenre) {
+  async updateGenre(id: Types.ObjectId, dto: updateGenre) {
     if ((dto.icons === ' ' || dto.link === ' ', dto.title === ' ')) {
-      await this.GenreModel.findOneAndDelete({ link: slug });
+      await this.GenreModel.findByIdAndDelete(id);
       throw new BadRequestException('Не верные данные!');
     }
 
-    return this.GenreModel.findOneAndUpdate({ link: slug }, dto, {
+    return this.GenreModel.findByIdAndUpdate(id, dto, {
       new: true,
     }).exec();
   }
 
-  async deleteGenre(id: string) {
+  async deleteGenre(id: Types.ObjectId) {
     return await this.GenreModel.findByIdAndDelete(id).exec();
   }
 

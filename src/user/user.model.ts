@@ -15,7 +15,10 @@ export class UserModel extends TimeStamps {
   @prop({ default: false })
   isAdmin: boolean;
 
-  @prop({ default: '' })
+  @prop({
+    default:
+      'http://localhost:5000/uploads/test/misterwives-connect-the-dots-music-paper-graphics-hummingbird-2-3-png-clip-art.png',
+  })
   avatar: string;
 
   @prop({ default: [], ref: () => BooksModel })

@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { idValidationPipe } from 'src/pipes/idValidationPipe';
 import { Auth } from 'src/auth/deccorators/Auth.deccorator';
+import { Types } from 'mongoose';
 
 @Controller('genre')
 export class GenreController {
@@ -27,9 +28,14 @@ export class GenreController {
     return await this.GenreService.getAllGenres(page, limit, searchTerm);
   }
 
-  @Get('byId/:slug')
-  async getGenreById(@Param('slug') slug: string) {
-    return await this.GenreService.getGenreById(slug);
+  @Get('byId/:_id')
+  async getGenreById(@Param('_id') _id: Types.ObjectId) {
+    return await this.GenreService.getGenreById(_id);
+  }
+
+  @Get('bySlug/:slug')
+  async getGenreBySlug(@Param('slug') slug: string) {
+    return await this.GenreService.getGenreBySlug(slug);
   }
 
   @Get('create')
@@ -38,16 +44,19 @@ export class GenreController {
     return await this.GenreService.createGenre();
   }
 
-  @Put(':slug')
+  @Put(':_id')
   @Auth('admin')
   @UsePipes(new ValidationPipe())
-  async updateGenre(@Param('slug') slug: string, @Body() dto: updateGenre) {
-    return await this.GenreService.updateGenre(slug, dto);
+  async updateGenre(
+    @Param('_id') _id: Types.ObjectId,
+    @Body() dto: updateGenre,
+  ) {
+    return await this.GenreService.updateGenre(_id, dto);
   }
 
   @Delete(':_id')
   @Auth('admin')
-  async deleteGenre(@Param('_id', idValidationPipe) _id: string) {
+  async deleteGenre(@Param('_id', idValidationPipe) _id: Types.ObjectId) {
     return await this.GenreService.deleteGenre(_id);
   }
 

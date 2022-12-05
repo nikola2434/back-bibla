@@ -57,7 +57,8 @@ export class AuthorsService {
 
   async createAuthor() {
     const newAuthor: updateAuthor = {
-      avatar: ' ',
+      avatar:
+        'http://localhost:5000/uploads/test/misterwives-connect-the-dots-music-paper-graphics-hummingbird-2-3-png-clip-art.png',
       BooksWritten: [],
       country: ' ',
       DateOfBirth: ' ',
